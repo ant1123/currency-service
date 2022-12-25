@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class ExchangeValueService {
             throw new IllegalStateException("Incorrect rates information");
         }
         BigDecimal rate = toRate.divide(fromRate, RoundingMode.HALF_UP);
-        BigDecimal convertedValue = initialValue.multiply(rate);
+        BigDecimal convertedValue = initialValue.multiply(rate).setScale(2, RoundingMode.HALF_UP);
         ExchangeValue exchangeValue = new ExchangeValue(fromName, toName, rate, initialValue, convertedValue);
         addExchangeValue(exchangeValue);
         System.out.println("exchangeValue " + exchangeValue);
